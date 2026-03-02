@@ -217,7 +217,7 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = { 
-                val cleanEmail = email.trim()
+                val cleanEmail = email.trim() // Quitamos espacios extras
                 val cleanPass = password.trim()
                 
                 if (cleanEmail == "cafeadmin@utc.edu.mx" && cleanPass == "admincafe") {
@@ -288,7 +288,7 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = { 
-                val cleanEmail = email.trim()
+                val cleanEmail = email.trim() // Quitamos espacios extras
                 
                 if (cleanEmail.isNotEmpty() && password.isNotEmpty()) {
                     auth.createUserWithEmailAndPassword(cleanEmail, password)
