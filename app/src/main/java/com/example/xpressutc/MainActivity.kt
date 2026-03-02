@@ -60,7 +60,7 @@ fun MainApp() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val auth = FirebaseAuth.getInstance() // Instancia de Firebase
+    val auth = FirebaseAuth.getInstance()
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         ModalNavigationDrawer(
@@ -127,6 +127,7 @@ fun MainApp() {
                     composable("register") { RegisterScreen(navController, auth) }
                     composable("catalog") { CatalogScreen(drawerState, scope) }
                     composable("student") { StudentScreen(navController) }
+                    composable("admin") { AdminScreen(navController) }
                 }
             }
         }
@@ -216,8 +217,13 @@ fun LoginScreen(navController: NavHostController, auth: FirebaseAuth) {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = { 
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    auth.signInWithEmailAndPassword(email, password)
+                val cleanEmail = email.trim()
+                val cleanPass = password.trim()
+                
+                if (cleanEmail == "cafeadmin@utc.edu.mx" && cleanPass == "admincafe") {
+                    navController.navigate("admin")
+                } else if (cleanEmail.isNotEmpty() && cleanPass.isNotEmpty()) {
+                    auth.signInWithEmailAndPassword(cleanEmail, cleanPass)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 navController.navigate("student")
@@ -282,8 +288,10 @@ fun RegisterScreen(navController: NavHostController, auth: FirebaseAuth) {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = { 
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    auth.createUserWithEmailAndPassword(email, password)
+                val cleanEmail = email.trim()
+                
+                if (cleanEmail.isNotEmpty() && password.isNotEmpty()) {
+                    auth.createUserWithEmailAndPassword(cleanEmail, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Toast.makeText(context, "¡Cuenta creada!", Toast.LENGTH_SHORT).show()
